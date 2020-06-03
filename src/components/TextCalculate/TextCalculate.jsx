@@ -8,7 +8,7 @@ export const TextCalculate = () => {
     values,
     price,
     time,
-    handleChange,
+    handleTextChange,
     handleSelect,
   } = useTextCalculate();
 
@@ -21,7 +21,7 @@ export const TextCalculate = () => {
             <textarea
               name="text"
               rows="30"
-              onChange={handleChange}
+              onChange={handleTextChange}
               value={values.text}
               placeholder="Ваш текст"
             ></textarea>
@@ -35,6 +35,7 @@ export const TextCalculate = () => {
                 value={values.language}
                 className={styles["select-css"]}
               >
+                <option>Выберите язык</option>
                 <option value="en">Англиский</option>
                 <option value="ru">Русский</option>
                 <option value="ua">Украинский</option>

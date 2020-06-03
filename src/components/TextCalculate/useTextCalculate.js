@@ -1,4 +1,6 @@
 import { useState } from "react";
+import TimerFactory from "working-times";
+import VALID_TIMER_CONFIG from "./workingDays";
 
 const calculatePrice = (textSize, language) => {
   let price = 0;
@@ -20,7 +22,54 @@ const calculatePrice = (textSize, language) => {
   return Math.round((price + Number.EPSILON) * 100) / 100;
 };
 
-const calculateTime = () => {};
+const calculateTime = (textSize, language) => {
+  if (textSize === 0) {
+    return null;
+  }
+  var options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    timezone: "UTC",
+  };
+
+  const timer = TimerFactory.getTimerInstance();
+
+  timer
+    .setConfigAsync(VALID_TIMER_CONFIG)
+    .then((t) => {
+      console.log(t.getBufferedCalendar);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  let totalMin = 0;
+
+  switch (language) {
+    case "en":
+      totalMin = 30 + textSize / 5.55;
+      break;
+    case "ru":
+      totalMin = 30 + textSize / 22.22;
+      break;
+    case "ua":
+      totalMin = 30 + textSize / 22.22;
+      break;
+    default:
+      return null;
+  }
+
+  if (totalMin < 60) {
+    totalMin = 60;
+  }
+
+  return timer
+    .add(new Date(), totalMin, "MINUTES")
+    .toLocaleString("ru", options);
+};
 
 const textSize = (text) => {
   return !text ? 0 : text.length;
@@ -31,7 +80,7 @@ const useTextCalculate = () => {
   const [price, setPrice] = useState();
   const [time, setTime] = useState();
 
-  const handleChange = (event) => {
+  const handleTextChange = (event) => {
     event.persist();
 
     setValues((values) => ({
@@ -55,7 +104,7 @@ const useTextCalculate = () => {
     setPrice(calculatePrice(textSize(values.text), event.target.value));
   };
 
-  return { values, price, time, handleChange, handleSelect };
+  return { values, price, time, handleTextChange, handleSelect };
 };
 
 export default useTextCalculate;
