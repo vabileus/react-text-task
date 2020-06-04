@@ -5,18 +5,20 @@ import VALID_TIMER_CONFIG from "./workingDays";
 const calculatePrice = (textSize, language) => {
   let price = 0;
 
-  switch (language) {
-    case "en":
-      price = 120 + textSize * 0.12;
-      break;
-    case "ru":
-      price = 50 + textSize * 0.05;
-      break;
-    case "ua":
-      price = 50 + textSize * 0.05;
-      break;
-    default:
-      break;
+  if (textSize > 0) {
+    switch (language) {
+      case "en":
+        price = 120 + textSize * 0.12;
+        break;
+      case "ru":
+        price = 50 + textSize * 0.05;
+        break;
+      case "ua":
+        price = 50 + textSize * 0.05;
+        break;
+      default:
+        break;
+    }
   }
 
   return Math.round((price + Number.EPSILON) * 100) / 100;
